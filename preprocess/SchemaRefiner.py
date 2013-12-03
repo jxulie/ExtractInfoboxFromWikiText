@@ -10,17 +10,17 @@ Created on 2013-12-2
 
 input:
 
-    infobox(entity, attribute, value)
+    infobox:    (entity,attribute, value) split with "\t"
 
-    category  (entity, category)
+    category:   (entity, category) split with "\t"
 
-    threshold   real value between [0-1] which means that
+    threshold:  real value between [0-1] which means that
                 at least threshold*100% percent of the entities in the category
                 that contains the attribute
 
 output:
 
-    refined schema (category, attribute)
+    refined schema: (category, attribute, ratio) split with "\t"
 
 e.g.:
 
@@ -35,8 +35,8 @@ e.g.:
     ati    总部地点    加拿大安大略省万锦
     ati    成立时间    1985年
     ati    经营范围    显卡、芯片组、电子游戏机
-    ibm    公司口号    客户永远是第一位的
-    ibm    公司名称    冶天
+    ibm    公司口号    停止空谈，开始行动！
+    ibm    公司名称    国际商业机器公司
     ibm    公司性质    外商独资
     --end--
 
@@ -88,8 +88,7 @@ class SchemaRefiner(object):
         self.write_category_attribute_pair(schema_path)
 
     def read_entity_attribute_dict_file(self, infobox_path):
-        '''Get attribute_entity_dict and entity_attribute_dict
-        from infobox file'''
+        '''Get entity_attribute_dict from infobox file'''
         self.entity_attribute_dict = dict()
         eafile = open(infobox_path,'r')
         ealines = eafile.readlines()
