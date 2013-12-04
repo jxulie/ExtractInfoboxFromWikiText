@@ -84,14 +84,14 @@ class SchemaEntityValue(object):
                                     #value:entity
                                     #from category file
 
-    def __init__(self, infobox_path, category_path,\
+    def __init__(self, infobox_path, category_path, \
                  schema_path, schema_entity_value_menu):
         '''Notice that: schema_entity_value_menu is a menu, not a path'''
         self.read_infobox_file(infobox_path)
         self.read_category_file(category_path)
         self.write_schema_entity_value(schema_path, schema_entity_value_menu)
 
-    def read_infobox_file(self,infobox_path):
+    def read_infobox_file(self, infobox_path):
         '''Get attribute_entity_dict and
         entity_attribute_value_dictfrom infobox file'''
         self.attribute_entity_dict = dict()
@@ -129,7 +129,7 @@ class SchemaEntityValue(object):
                 print line
         category_file.close()
 
-    def write_schema_entity_value(self,schema_path, schema_entity_value_menu):
+    def write_schema_entity_value(self, schema_path, schema_entity_value_menu):
         '''Get schema. for each schema, find the training data'''
         if not os.path.exists(schema_entity_value_menu):
             os.makedirs(schema_entity_value_menu)
@@ -143,14 +143,16 @@ class SchemaEntityValue(object):
                 category = words[0]
                 attribute = words[1]
                 file_name = category + "_" + attribute
+                file_name = file_name.decode("utf-8")
+                print file_name
                 entity_set = self.category_entity_dict[category].\
                             intersection(self.attribute_entity_dict[attribute])
                 #                 create schema entity value file
                 schema_entity_value_file = open(schema_entity_value_menu\
                                                 + file_name, 'w')
                 for entity in entity_set:
-                    schema_entity_value_file.write(entity,\
-                        self.entity_attribute_value_dict[(entity, attribute)])
+                    schema_entity_value_file.write("%s\t%s\n" %(entity, \
+                        self.entity_attribute_value_dict[(entity, attribute)]))
 
                 schema_entity_value_file.close()
             except IOError:
@@ -158,11 +160,11 @@ class SchemaEntityValue(object):
         schema_file.close()
 
 if __name__ == "__main__":
-    MENU_PATH = "H://xubo//baidu4//"
+    MENU_PATH = "G://xubo//baidu4//"
     INFOBOX_PATH = MENU_PATH + "baiduinfobox_filter.txt"
     CATEGORY_PATH = MENU_PATH + "baiducategory_filter10.txt"
     SCHEMA_PATH = MENU_PATH + "sample_baidu_schema_refinered.txt"
-    SCHEMA_ENTITY_VALUE_MENU = MENU_PATH + "trainset1"
+    SCHEMA_ENTITY_VALUE_MENU = MENU_PATH + "trainset1\\"
     TEST = SchemaEntityValue(INFOBOX_PATH, \
                          CATEGORY_PATH, SCHEMA_PATH, SCHEMA_ENTITY_VALUE_MENU)
     
