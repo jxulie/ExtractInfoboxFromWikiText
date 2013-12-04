@@ -100,9 +100,9 @@ class SampleSchema(object):
         % ",".join(self.category_list)
 
 if __name__ == "__main__":
-    MENU_PATH = "H://xubo//baidu4//"
+    MENU_PATH = "G://xubo//baidu4//"
     SCHEMA_ENSEMBLE_PATH = MENU_PATH + "baidu_schema_refinered.txt"
-    SAMPLE_CATEGORY_STRING = "电视剧,歌手"
+    SAMPLE_CATEGORY_STRING = "歌手"
     SAMPLE_SCHEMA_PATH = MENU_PATH + "sample_baidu_schema_refinered.txt"
     TEST = SampleSchema(SCHEMA_ENSEMBLE_PATH, \
                          SAMPLE_CATEGORY_STRING, SAMPLE_SCHEMA_PATH)
