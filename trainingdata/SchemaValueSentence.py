@@ -91,6 +91,8 @@ class SchemaValueSentence(object):
         self.read_schema_entity_value_file(schema_entity_value_menu, \
                                            article_menu, \
                                            schema_value_sentence_menu)
+        if not os.path.exists(schema_value_sentence_menu):
+            os.makedirs(schema_value_sentence_menu)
 
     def read_schema_entity_value_file(self, \
                                       schema_entity_value_menu, \
@@ -99,7 +101,7 @@ class SchemaValueSentence(object):
         '''Step1: read the schema entity value file.'''
         schema_list = os.listdir(schema_entity_value_menu)
         for schema in schema_list:
-            schema = schema#.decode("gb18030")
+#             schema = schema#.decode("gb18030")
             self.read_each_schema_file(schema_entity_value_menu, \
                                        schema, \
                                        article_menu, \
@@ -131,26 +133,31 @@ class SchemaValueSentence(object):
         except IOError:
             print schema + schema + " not exist"
 
-    def read_each_article_file(self, article_menu, entity):
+    @staticmethod
+    def read_each_article_file(article_menu, entity):
         '''read each article, and return the lines'''
         article_file = open(article_menu + entity.decode("utf-8") + ".txt", 'r')
         article_lines = article_file.readlines()
         return article_lines
 
-    def write_match_sentence(self, \
-                            schema, \
+    @staticmethod
+    def write_match_sentence(schema, \
                             value, \
                             lines, \
                             schema_value_sentence_menu):
         '''find value in sentence of file
         if value in sentence, write value,sentence pair'''
-        if not os.path.exists(schema_value_sentence_menu):
-            os.makedirs(schema_value_sentence_menu)
+
         match_file = open(schema_value_sentence_menu + schema, 'a')
         for line in lines:
-            line = line.strip()
-            if value in line:
-                match_file.write("%s\t%s\n" %(value,line))
+            line = line.rstrip()
+            newline = line.replace(" ", "")
+            newline = newline.replace("，","\t")
+            newline = newline.replace("。","\t")
+            words = newline.split("\t")
+            for word in words:
+                if value in word:
+                    match_file.write("%s\t%s\n" %(value, word))
         match_file.close()
 
 if __name__ == "__main__":
