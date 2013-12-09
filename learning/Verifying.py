@@ -161,18 +161,34 @@ class Verifying(object):
             entity = words[0]
             value = words[1]
             article_lines = self.read_each_article_file(entity)
+#             extract all pattern values from the article
             if article_lines:
                 extract_pattern_values = self.extract_pattern_value(patterns, \
                                                             article_lines)
-                if extract_pattern_values:
-                    local_pattern_count_dict = self.compare_two_value(\
-                                            value, extract_pattern_values)
-                    for local_pattern, count_tuple in\
-                                     local_pattern_count_dict.iteritems():
-                        if local_pattern not in pattern_count_dict:
-                            pattern_count_dict[local_pattern] = [0,0]
-                        pattern_count_dict[local_pattern][0] += count_tuple[0]
-                        pattern_count_dict[local_pattern][1] += count_tuple[1]
+#                if one pattern extract one value, accept; else, reject
+            if extract_pattern_values:
+#                 put all value in pattern dict
+                pattern_value_dict = dict()
+                for pattern_value in extract_pattern_values:
+                    one_pattern = pattern_value[0]
+                    two_value = pattern_value[1]
+                    if one_pattern not in pattern_value_dict:
+                        pattern_value_dict[one_pattern] = set()
+                    pattern_value_dict[one_pattern].add(two_value)
+                for dict_pattern, dict_value in pattern_value_dict.iteritems():
+                    list_value = list(dict_value)
+                    if len(list_value) == 1:
+                        new_value = list_value[0]
+                        if dict_pattern not in pattern_count_dict:
+                            pattern_count_dict[dict_pattern] = [0,0]
+                        pattern_count_dict[dict_pattern][1] += 1
+#                         print dict_pattern, value, new_value
+                        if self.compare_two_value(value, new_value) == 1:
+                            pattern_count_dict[dict_pattern][0] += 1
+                        else:
+                            pattern_count_dict[dict_pattern][0] += 0
+#                     else:
+#                         print dict_pattern, ",".join(dict_value)
         for pattern, count_tuple in pattern_count_dict.iteritems():
             pattern_count_list.append((pattern, count_tuple[0], count_tuple[1]))
         return pattern_count_list
@@ -210,17 +226,15 @@ class Verifying(object):
                     pass
         return pattern_value_list
 
-    def compare_two_value(self, value, extract_pattern_values):
-        '''compare exact value and the extract pattern value sets'''
-        local_pattern_count_dict = dict()
-        for pattern, extract_value in extract_pattern_values:
-            if pattern not in local_pattern_count_dict:
-                local_pattern_count_dict[pattern] = [0,0]
-            lcs = self.longest_common_subsequence(value, extract_value)
-            if lcs == value or lcs == extract_value:
-                local_pattern_count_dict[pattern][0] += 1
-            local_pattern_count_dict[pattern][1] += 1
-        return local_pattern_count_dict
+    def compare_two_value(self, value, extract_pattern_value):
+        '''compare exact value and the extract pattern value'''
+        result = 0
+        lcs = self.longest_common_subsequence(value, extract_pattern_value)
+        if lcs == value or lcs == extract_pattern_value:
+            result = 1
+        else:
+            result = 0
+        return result
 
     @staticmethod
     def longest_common_subsequence(value1, value2):

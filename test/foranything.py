@@ -28,29 +28,35 @@ Created on 2013-12-3
 #     for value in extract_value:
 #         print value
 
-def lcs(value1, value2):
-    lengths = [[0 for temp_j in range(len(value2)+1)] for temp_i in range(len(value1)+1)]
-    # row 0 and column 0 are initialized to 0 already
-    for temp_i, temp_x in enumerate(value1):
-        for temp_j, temp_y in enumerate(value2):
-            if temp_x == temp_y:
-                lengths[temp_i+1][temp_j+1] = lengths[temp_i][temp_j] + 1
-            else:
-                lengths[temp_i+1][temp_j+1] = \
-                    max(lengths[temp_i+1][temp_j], lengths[temp_i][temp_j+1])
-    # read the substring out from the matrix
-    result = ""
-    temp_x, temp_y = len(value1), len(value2)
-    while temp_x != 0 and temp_y != 0:
-        if lengths[temp_x][temp_y] == lengths[temp_x-1][temp_y]:
-            temp_x -= 1
-        elif lengths[temp_x][temp_y] == lengths[temp_x][temp_y-1]:
-            temp_y -= 1
-        else:
-            assert value1[temp_x-1] == value2[temp_y-1]
-            result = value1[temp_x-1] + result
-            temp_x -= 1
-            temp_y -= 1
-    return result
+# def lcs(value1, value2):
+#     lengths = [[0 for temp_j in range(len(value2)+1)] for temp_i in range(len(value1)+1)]
+#     # row 0 and column 0 are initialized to 0 already
+#     for temp_i, temp_x in enumerate(value1):
+#         for temp_j, temp_y in enumerate(value2):
+#             if temp_x == temp_y:
+#                 lengths[temp_i+1][temp_j+1] = lengths[temp_i][temp_j] + 1
+#             else:
+#                 lengths[temp_i+1][temp_j+1] = \
+#                     max(lengths[temp_i+1][temp_j], lengths[temp_i][temp_j+1])
+#     # read the substring out from the matrix
+#     result = ""
+#     temp_x, temp_y = len(value1), len(value2)
+#     while temp_x != 0 and temp_y != 0:
+#         if lengths[temp_x][temp_y] == lengths[temp_x-1][temp_y]:
+#             temp_x -= 1
+#         elif lengths[temp_x][temp_y] == lengths[temp_x][temp_y-1]:
+#             temp_y -= 1
+#         else:
+#             assert value1[temp_x-1] == value2[temp_y-1]
+#             result = value1[temp_x-1] + result
+#             temp_x -= 1
+#             temp_y -= 1
+#     return result
+# 
+# print lcs("中国人物","中国是人")
 
-print lcs("中国人物","中国是人")
+set1 = set()
+set1.add("a")
+
+
+print set1[0]
